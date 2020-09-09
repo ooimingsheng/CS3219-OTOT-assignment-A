@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  # Proxies requests to internal services
+  reverse-proxy:
+    image: nginx:1.17.10
+    container_name: reverse_proxy_demo
+    depends_on:
+        - frontend
+    volumes:
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8000:80
+
+  
+  # produces the static pages
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+    restart: on-failure
